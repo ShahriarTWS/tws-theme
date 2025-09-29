@@ -45,9 +45,7 @@
           "blocks": {}
         }
       },
-      "block_order": [
-        "ai_gen_block_d9d873d_tUwFR8"
-      ],
+      "block_order": ["ai_gen_block_d9d873d_tUwFR8"],
       "settings": {}
     },
     "banner": {
@@ -55,8 +53,5 @@
       "settings": {}
     }
   },
-  "order": [
-    "1759155837baf2b9de",
-    "banner"
-  ]
+  "order": ["1759155837baf2b9de", "banner"]
 }
