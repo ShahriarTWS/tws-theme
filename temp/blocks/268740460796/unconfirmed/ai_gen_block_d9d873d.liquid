@@ -1,6 +1,467 @@
+{% doc %}
+  @prompt
+    I want to build a navbar
+
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-navbar-{{ ai_gen_id }} {
+    background-color: {{ block.settings.background_color }};
+    border-bottom: {{ block.settings.border_width }}px solid {{ block.settings.border_color }};
+    position: relative;
+    z-index: 100;
+  }
+
+  .ai-navbar-container-{{ ai_gen_id }} {
+    max-width: {{ block.settings.max_width }}px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: {{ block.settings.navbar_height }}px;
+  }
+
+  .ai-navbar-logo-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: {{ block.settings.logo_color }};
+    font-size: {{ block.settings.logo_size }}px;
+    font-weight: 600;
+  }
+
+  .ai-navbar-logo-image-{{ ai_gen_id }} {
+    height: {{ block.settings.logo_height }}px;
+    width: auto;
+  }
+
+  .ai-navbar-menu-{{ ai_gen_id }} {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: {{ block.settings.menu_spacing }}px;
+  }
+
+  .ai-navbar-menu-item-{{ ai_gen_id }} {
+    position: relative;
+  }
+
+  .ai-navbar-menu-link-{{ ai_gen_id }} {
+    display: block;
+    padding: 12px 16px;
+    color: {{ block.settings.menu_color }};
+    text-decoration: none;
+    font-size: {{ block.settings.menu_font_size }}px;
+    transition: color 0.3s ease;
+    border-radius: {{ block.settings.link_border_radius }}px;
+  }
+
+  .ai-navbar-menu-link-{{ ai_gen_id }}:hover {
+    color: {{ block.settings.menu_hover_color }};
+    background-color: {{ block.settings.menu_hover_bg_color }};
+  }
+
+  .ai-navbar-mobile-toggle-{{ ai_gen_id }} {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    color: {{ block.settings.menu_color }};
+  }
+
+  .ai-navbar-mobile-toggle-{{ ai_gen_id }} svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .ai-navbar-mobile-menu-{{ ai_gen_id }} {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: {{ block.settings.background_color }};
+    border-top: 1px solid {{ block.settings.border_color }};
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  .ai-navbar-mobile-menu-{{ ai_gen_id }}.active {
+    display: block;
+  }
+
+  .ai-navbar-mobile-menu-list-{{ ai_gen_id }} {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ai-navbar-mobile-menu-item-{{ ai_gen_id }} {
+    border-bottom: 1px solid {{ block.settings.border_color }};
+  }
+
+  .ai-navbar-mobile-menu-item-{{ ai_gen_id }}:last-child {
+    border-bottom: none;
+  }
+
+  .ai-navbar-mobile-menu-link-{{ ai_gen_id }} {
+    display: block;
+    padding: 16px 20px;
+    color: {{ block.settings.menu_color }};
+    text-decoration: none;
+    font-size: {{ block.settings.menu_font_size }}px;
+  }
+
+  .ai-navbar-mobile-menu-link-{{ ai_gen_id }}:hover {
+    color: {{ block.settings.menu_hover_color }};
+    background-color: {{ block.settings.menu_hover_bg_color }};
+  }
+
+  @media screen and (max-width: 768px) {
+    .ai-navbar-menu-{{ ai_gen_id }} {
+      display: none;
+    }
+
+    .ai-navbar-mobile-toggle-{{ ai_gen_id }} {
+      display: block;
+    }
+  }
+{% endstyle %}
+
+<navbar-{{ ai_gen_id }} class="ai-navbar-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <div class="ai-navbar-container-{{ ai_gen_id }}">
+    <a href="{{ block.settings.logo_link | default: '/' }}" class="ai-navbar-logo-{{ ai_gen_id }}">
+      {% if block.settings.logo_image %}
+        <img
+          src="{{ block.settings.logo_image | image_url: width: 200 }}"
+          alt="{{ shop.name }}"
+          class="ai-navbar-logo-image-{{ ai_gen_id }}"
+          width="200"
+          height="{{ block.settings.logo_height }}"
+          loading="lazy"
+        >
+      {% else %}
+        {{ block.settings.logo_text | default: shop.name }}
+      {% endif %}
+    </a>
+
+    <nav class="ai-navbar-nav-{{ ai_gen_id }}">
+      <ul class="ai-navbar-menu-{{ ai_gen_id }}">
+        {% for i in (1..5) %}
+          {% liquid
+            assign link_text_key = 'menu_link_' | append: i | append: '_text'
+            assign link_url_key = 'menu_link_' | append: i | append: '_url'
+            assign link_text = block.settings[link_text_key]
+            assign link_url = block.settings[link_url_key]
+          %}
+          
+          {% if link_text != blank %}
+            <li class="ai-navbar-menu-item-{{ ai_gen_id }}">
+              <a
+                href="{{ link_url | default: '#' }}"
+                class="ai-navbar-menu-link-{{ ai_gen_id }}"
+              >
+                {{ link_text }}
+              </a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </nav>
+
+    <button
+      class="ai-navbar-mobile-toggle-{{ ai_gen_id }}"
+      aria-label="Toggle mobile menu"
+      aria-expanded="false"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+
+    <div class="ai-navbar-mobile-menu-{{ ai_gen_id }}">
+      <ul class="ai-navbar-mobile-menu-list-{{ ai_gen_id }}">
+        {% for i in (1..5) %}
+          {% liquid
+            assign link_text_key = 'menu_link_' | append: i | append: '_text'
+            assign link_url_key = 'menu_link_' | append: i | append: '_url'
+            assign link_text = block.settings[link_text_key]
+            assign link_url = block.settings[link_url_key]
+          %}
+          
+          {% if link_text != blank %}
+            <li class="ai-navbar-mobile-menu-item-{{ ai_gen_id }}">
+              <a
+                href="{{ link_url | default: '#' }}"
+                class="ai-navbar-mobile-menu-link-{{ ai_gen_id }}"
+              >
+                {{ link_text }}
+              </a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</navbar-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class Navbar{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.mobileToggle = this.querySelector('.ai-navbar-mobile-toggle-{{ ai_gen_id }}');
+        this.mobileMenu = this.querySelector('.ai-navbar-mobile-menu-{{ ai_gen_id }}');
+        this.setupEventListeners();
+      }
+
+      setupEventListeners() {
+        this.mobileToggle.addEventListener('click', () => {
+          const isActive = this.mobileMenu.classList.contains('active');
+          this.mobileMenu.classList.toggle('active');
+          this.mobileToggle.setAttribute('aria-expanded', !isActive);
+        });
+
+        document.addEventListener('click', (event) => {
+          if (!this.contains(event.target)) {
+            this.mobileMenu.classList.remove('active');
+            this.mobileToggle.setAttribute('aria-expanded', 'false');
+          }
+        });
+
+        window.addEventListener('resize', () => {
+          if (window.innerWidth > 768) {
+            this.mobileMenu.classList.remove('active');
+            this.mobileToggle.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
+    }
+
+    customElements.define('navbar-{{ ai_gen_id }}', Navbar{{ ai_gen_id }});
+  })();
+</script>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Navigation bar",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Logo image"
+    },
+    {
+      "type": "text",
+      "id": "logo_text",
+      "label": "Logo text",
+      "default": "Your Store"
+    },
+    {
+      "type": "url",
+      "id": "logo_link",
+      "label": "Logo link"
+    },
+    {
+      "type": "range",
+      "id": "logo_height",
+      "min": 20,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "label": "Logo height",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "logo_size",
+      "min": 16,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "label": "Logo text size",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "logo_color",
+      "label": "Logo color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Menu links"
+    },
+    {
+      "type": "text",
+      "id": "menu_link_1_text",
+      "label": "Link 1 text",
+      "default": "Home"
+    },
+    {
+      "type": "url",
+      "id": "menu_link_1_url",
+      "label": "Link 1 URL"
+    },
+    {
+      "type": "text",
+      "id": "menu_link_2_text",
+      "label": "Link 2 text",
+      "default": "Shop"
+    },
+    {
+      "type": "url",
+      "id": "menu_link_2_url",
+      "label": "Link 2 URL"
+    },
+    {
+      "type": "text",
+      "id": "menu_link_3_text",
+      "label": "Link 3 text",
+      "default": "About"
+    },
+    {
+      "type": "url",
+      "id": "menu_link_3_url",
+      "label": "Link 3 URL"
+    },
+    {
+      "type": "text",
+      "id": "menu_link_4_text",
+      "label": "Link 4 text",
+      "default": "Contact"
+    },
+    {
+      "type": "url",
+      "id": "menu_link_4_url",
+      "label": "Link 4 URL"
+    },
+    {
+      "type": "text",
+      "id": "menu_link_5_text",
+      "label": "Link 5 text"
+    },
+    {
+      "type": "url",
+      "id": "menu_link_5_url",
+      "label": "Link 5 URL"
+    },
+    {
+      "type": "header",
+      "content": "Style"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "border_color",
+      "label": "Border color",
+      "default": "#e5e5e5"
+    },
+    {
+      "type": "range",
+      "id": "border_width",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "unit": "px",
+      "label": "Border width",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "navbar_height",
+      "min": 60,
+      "max": 120,
+      "step": 5,
+      "unit": "px",
+      "label": "Navigation height",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 1000,
+      "max": 1400,
+      "step": 50,
+      "unit": "px",
+      "label": "Maximum width",
+      "default": 1200
+    },
+    {
+      "type": "header",
+      "content": "Menu style"
+    },
+    {
+      "type": "color",
+      "id": "menu_color",
+      "label": "Menu text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "menu_hover_color",
+      "label": "Menu hover text color",
+      "default": "#0066cc"
+    },
+    {
+      "type": "color",
+      "id": "menu_hover_bg_color",
+      "label": "Menu hover background",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "range",
+      "id": "menu_font_size",
+      "min": 12,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Menu font size",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "menu_spacing",
+      "min": 0,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "label": "Menu spacing",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "link_border_radius",
+      "min": 0,
+      "max": 12,
+      "step": 2,
+      "unit": "px",
+      "label": "Link border radius",
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "Navigation bar"
+    }
+  ]
+}
 {% endschema %}
