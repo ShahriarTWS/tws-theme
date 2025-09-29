@@ -9,12 +9,54 @@
  */
 {
   "sections": {
+    "1759155837baf2b9de": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_d9d873d_tUwFR8": {
+          "type": "ai_gen_block_d9d873d",
+          "settings": {
+            "logo_text": "Your Store",
+            "logo_link": "",
+            "logo_height": 40,
+            "logo_size": 24,
+            "logo_color": "#000000",
+            "menu_link_1_text": "Home",
+            "menu_link_1_url": "",
+            "menu_link_2_text": "Shop",
+            "menu_link_2_url": "",
+            "menu_link_3_text": "About",
+            "menu_link_3_url": "",
+            "menu_link_4_text": "Contact",
+            "menu_link_4_url": "",
+            "menu_link_5_text": "",
+            "menu_link_5_url": "",
+            "background_color": "#ffffff",
+            "border_color": "#e5e5e5",
+            "border_width": 1,
+            "navbar_height": 70,
+            "max_width": 1200,
+            "menu_color": "#000000",
+            "menu_hover_color": "#0066cc",
+            "menu_hover_bg_color": "#f5f5f5",
+            "menu_font_size": 16,
+            "menu_spacing": 8,
+            "link_border_radius": 4
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_d9d873d_tUwFR8"
+      ],
+      "settings": {}
+    },
     "banner": {
       "type": "banner",
       "settings": {}
     }
   },
   "order": [
+    "1759155837baf2b9de",
     "banner"
   ]
 }
