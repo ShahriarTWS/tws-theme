@@ -1,3 +1,5 @@
-[environments.stater]
-store = "sn-stater-theme"
+[environments.tws]
+store = "tws-theme"
 store-password ="123"
+theme = "tws-theme/main"
+theme-editor-sync = true
