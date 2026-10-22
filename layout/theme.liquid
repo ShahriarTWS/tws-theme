@@ -4,10 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    {{ 'style.css' | | asset_url || stylesheet_tag }}
+    {{ 'style.css' | asset_url | stylesheet_tag }}
     {{ content_for_header }}
   </head>
   <body>
     {{ content_for_layout }}
   </body>
 </html>
+{% comment %}
+
+This file has been rewritten to preserve the original behavior.
+
+---
+Changes:
+- from: "{{ 'style.css' | | asset_url || stylesheet_tag }}"
+  to: "{{ 'style.css' | asset_url | stylesheet_tag }}"
+  position: 176..222
+{% endcomment %}
